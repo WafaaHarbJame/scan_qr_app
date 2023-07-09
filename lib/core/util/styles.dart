@@ -9,4 +9,10 @@ abstract class Styles {
 
   static const textStyle14 = TextStyle(
       fontSize: 14, fontWeight: FontWeight.w500, color: kPrimaryColor);
+ static const textStyleWhiteBold = TextStyle(
+      fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white);
+
+  static const textStyleWhiteNormal = TextStyle(
+      fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white);
+
 }

@@ -16,3 +16,4 @@ const kLightPrimaryColor = Color(0xffE7E5F1);
 const kLightSecondaryColor = Color(0xffFFE6A6);
 const kLightDangerColor = Color(0xffFEE2E7);
 const kOnLightDangerColor = Color(0xff783341);
+const kRed2DangerColor = Color(0xff9B6A73);
