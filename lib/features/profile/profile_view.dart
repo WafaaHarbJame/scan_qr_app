@@ -1,4 +1,5 @@
 import 'package:bootcamp_starter/core/widgets/primary_button_widget.dart';
+import 'package:bootcamp_starter/features/new_link/add_link_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -46,6 +47,10 @@ class _ProfileViewState extends State<ProfileView> {
             right: 20,
             child: InkWell(
               onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>AddLinkView()));
                 // handle button press
               },
               child: Container(
@@ -81,15 +86,12 @@ class LinksListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-      Slidable(
+    return Slidable(
       key: const ValueKey(0),
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
         dismissible: DismissiblePane(onDismissed: () {}),
         children: [
-          // CustomButton(),
-
           SlidableAction(
             onPressed: (context) {},
             flex: 1,

@@ -1,3 +1,5 @@
+import 'package:bootcamp_starter/features/auth/register_view.dart';
+import 'package:bootcamp_starter/features/new_link/add_link_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -14,7 +16,7 @@ class HomeView extends StatelessWidget {
         elevation: 0,
         automaticallyImplyLeading: false,
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+          IconButton(onPressed: () {  }, icon: const Icon(Icons.search)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.qr_code_scanner))
         ],
       ),
@@ -96,8 +98,7 @@ class ListItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text("FaceBook",
-
-          style: TextStyle(
+              style: TextStyle(
                 color: Color(0xff784E00),
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
@@ -130,8 +131,15 @@ class AddItem extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
-          const Text("add",
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddLinkView()));
+              },
+              icon: const Icon(Icons.add)),
+           const Text("add",
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.normal,
