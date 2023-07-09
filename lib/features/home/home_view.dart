@@ -16,7 +16,7 @@ class HomeView extends StatelessWidget {
         elevation: 0,
         automaticallyImplyLeading: false,
         actions: [
-          IconButton(onPressed: () {  }, icon: const Icon(Icons.search)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.qr_code_scanner))
         ],
       ),
@@ -139,7 +139,7 @@ class AddItem extends StatelessWidget {
                         builder: (context) => const AddLinkView()));
               },
               icon: const Icon(Icons.add)),
-           const Text("add",
+          const Text("add",
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.normal,

@@ -1,10 +1,13 @@
 import 'package:bootcamp_starter/core/widgets/primary_button_widget.dart';
+import 'package:bootcamp_starter/features/edit_link/edit_link.dart';
 import 'package:bootcamp_starter/features/new_link/add_link_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../core/util/constants.dart';
 import '../../core/util/styles.dart';
+import '../edit_user_info/edit_user_info.dart';
+import '../edit_link/edit_link.dart';
 
 class ProfileView extends StatefulWidget {
   static String id = '/profileView';
@@ -47,10 +50,8 @@ class _ProfileViewState extends State<ProfileView> {
             right: 20,
             child: InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>AddLinkView()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AddLinkView()));
                 // handle button press
               },
               child: Container(
@@ -107,7 +108,12 @@ class LinksListItem extends StatelessWidget {
             width: 4, // Add desired width between actions
           ),
           SlidableAction(
-            onPressed: (context) {},
+            onPressed: (context) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => edit_link()),
+              );
+            },
             flex: 1,
             backgroundColor: kSecondaryColor,
             foregroundColor: Colors.white,
@@ -185,7 +191,12 @@ class CardProfile extends StatelessWidget {
                 ],
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => edit_user_info()),
+                  );
+                },
                 icon: const Icon(Icons.edit),
                 color: Colors.white,
               )
