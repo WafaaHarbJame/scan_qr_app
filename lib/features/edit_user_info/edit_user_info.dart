@@ -120,7 +120,7 @@ class _edit_user_infoState extends State<edit_user_info> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.all(50),
+              margin: const EdgeInsets.symmetric(horizontal: 10,vertical: 20),
               child: Center(
                 child: ElevatedButton(
                   onPressed: () {

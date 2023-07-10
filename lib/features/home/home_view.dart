@@ -3,6 +3,8 @@ import 'package:bootcamp_starter/features/new_link/add_link_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../Scan QR/scanyourorcode.dart';
+
 class HomeView extends StatelessWidget {
   static String id = '/homeView';
 
@@ -12,12 +14,19 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        // backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.qr_code_scanner))
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ScanyourQRCode()));
+              },
+              icon: const Icon(Icons.qr_code_scanner))
         ],
       ),
       body: Column(

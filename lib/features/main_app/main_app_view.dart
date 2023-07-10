@@ -4,6 +4,8 @@ import 'package:bootcamp_starter/features/main_app/widgets/custom_floating_nav_b
 import 'package:bootcamp_starter/features/profile/profile_view.dart';
 import 'package:flutter/material.dart';
 
+import '../profile/profile_view.dart';
+
 class MainAppView extends StatefulWidget {
   static String id = '/mainAppView';
 
@@ -17,7 +19,7 @@ class _MainAppViewState extends State<MainAppView> {
   int _currentIndex = 1;
 
   late List<Widget?> screensList = [
-    const ReceiveView(),
+     ReceiveView(),
     const HomeView(),
     const ProfileView()
   ];
