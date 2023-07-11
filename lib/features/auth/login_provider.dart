@@ -1,31 +1,54 @@
+import 'package:bootcamp_starter/features/auth/UserPreferences.dart';
 import 'package:bootcamp_starter/features/auth/UserRepository.dart';
 import 'package:bootcamp_starter/features/auth/user_model.dart';
-import 'package:flutter/cupertino.dart';
 import '../../../../network/api_response.dart';
 
 
-class LoginProvider extends ChangeNotifier {
-  late UserRepository userRepository;
+// class LoginProvider extends ChangeNotifier {
+//   late UserRepository userRepository;
+//
+//   late ApiResponse<User> userApiResponse;
+//
+//   ApiResponse<User> get user => userApiResponse;
+//
+//   LoginProvider() {
+//     userApiResponse = ApiResponse.stop('not launch');
+//     userRepository =UserRepository();
+//   }
+//
+//   loginUser() async {
+//     userApiResponse = ApiResponse.loading('login');
+//     notifyListeners();
+//     try {
+//       User user = await userRepository.login("/login");
+//       userApiResponse = ApiResponse.completed(user);
+//       UserPreferences.saveUser(user);
+//
+//       notifyListeners();
+//     } catch (e) {
+//       userApiResponse = ApiResponse.error(e.toString());
+//       notifyListeners();
+//     }
+//   }
+// }
 
-  late ApiResponse<User> userApiResponse;
+class LoginProvider {
+  late UserRepository userRepository  =UserRepository();
 
-  ApiResponse<User> get user => userApiResponse;
-
-  LoginProvider() {
-    userRepository =UserRepository();
-    loginUser();
-  }
-
-  loginUser() async {
+  Future<ApiResponse<User>>  loginUser(String userName,String password) async {
+    late ApiResponse<User> userApiResponse;
     userApiResponse = ApiResponse.loading('login');
-    notifyListeners();
     try {
-      User user = await userRepository.login();
-      userApiResponse = ApiResponse.completed(user);
-      notifyListeners();
+      UserResponse user = await userRepository.login("/login",userName,password);
+      userApiResponse = ApiResponse.completed(user.user,);
+      ShPreferences.saveUser(user.user);
+      ShPreferences.saveToken(user.token);
+
+
     } catch (e) {
       userApiResponse = ApiResponse.error(e.toString());
-      notifyListeners();
     }
+    return userApiResponse;
   }
 }
+

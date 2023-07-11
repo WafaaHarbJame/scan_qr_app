@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/util/constants.dart';
-import 'features/auth/UserPreferences.dart';
 import 'features/profile/links/providers/links_provider.dart';
 
 void main() async {
@@ -35,9 +34,9 @@ class MyApp extends StatelessWidget {
           create: (_) => LinkProvider(),
         ),
 
-        ChangeNotifierProvider<LoginProvider>(
-          create: (_) => LoginProvider(),
-        ),
+        // ChangeNotifierProvider<LoginProvider>(
+        //   create: (_) => LoginProvider(),
+        // ),
 
 
       ],

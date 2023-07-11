@@ -10,8 +10,9 @@ class UserRepository {
   String userToken = '1|LajBiiQSs1r9FOVowIXKpdFJYQAzCvrhCOjND7iM';
 
 
-  Future<dynamic> login() async {
-    final response = await _helper.post("", {'email' : 'a@gmail.com','password' : '123456'}, {});
-    return UserResponse.fromJson(response).results;
+  Future<dynamic> login(String url,String userName,String password) async {
+    final response = await _helper.post(url,{},{'email' : userName,'password' : password});
+    print("log $response");
+    return UserResponse.fromJson(response);
   }
 }

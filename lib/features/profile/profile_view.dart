@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import '../../core/util/constants.dart';
 import '../../core/util/styles.dart';
 import '../../network/api_response.dart';
+import '../auth/UserPreferences.dart';
+import '../auth/user_model.dart';
 import '../edit_user_info/edit_user_info.dart';
 import 'links/providers/links_provider.dart';
 
@@ -46,7 +48,7 @@ class _ProfileViewState extends State<ProfileView> {
         Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const CardProfile(),
+           CardProfile(),
           Consumer<LinkProvider>(
             builder: (_, linkProvider, __) {
               if (linkProvider.linkList.status == Status.LOADING) {
@@ -320,7 +322,7 @@ class LinksListItem extends StatelessWidget {
 }
 
 class CardProfile extends StatelessWidget {
-  const CardProfile({super.key});
+  User? savedUser = ShPreferences.getUser();
 
   @override
   Widget build(BuildContext context) {
@@ -337,15 +339,15 @@ class CardProfile extends StatelessWidget {
                 radius: 40,
                 backgroundImage: AssetImage('assets/imgs/user_photo.png'),
               ),
-              const Column(
+               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "John Doe",
+                    savedUser?.name??"",
                     style: Styles.textStyleWhiteBold,
                   ),
                   Text(
-                    "example@gmail.com",
+                    savedUser?.email??"",
                     style: Styles.textStyleWhiteBold,
                   ),
                   Text(

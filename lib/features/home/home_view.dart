@@ -14,7 +14,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User? savedUser = UserPreferences.getUser();
+    User? savedUser = ShPreferences.getUser();
     if (savedUser != null) {
       initData(savedUser);
     }

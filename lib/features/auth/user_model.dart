@@ -1,14 +1,30 @@
 class UserResponse {
-  User? results=null;
+  User? user;
+  String? token;
+
+  UserResponse({this.user, this.token});
 
   UserResponse.fromJson(Map<String, dynamic> json) {
-    //you can use your custom json field depend on api response
-    // totalResults = json['total_results'];
-    if (json['user'] != null) {
-
-    }
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
+    token = json['token'];
   }
 }
+
+  // UserResponse.fromJson(Map<String, dynamic> json) {
+  //   //you can use your custom json field depend on api response
+  //   // totalResults = json['total_results'];
+  //   if (json['user'] != null) {
+  //       results=User.fromJson(json['user']);
+  //   }
+  //
+  //   if (json['token'] != null) {
+  //     token=User.fromJson(json['token']) as String?;
+  //   }
+  //
+  //
+  //
+  // }
+
 
 class User {
   int? id;
