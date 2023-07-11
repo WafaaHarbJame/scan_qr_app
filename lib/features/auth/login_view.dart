@@ -11,6 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../network/api_base_helper.dart';
 import '../main_app/main_app_view.dart';
+import 'UserPreferences.dart';
 import 'widgets/google_button_widget.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,6 +25,8 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     UserPreferences.init();
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -125,8 +128,13 @@ Future<void> makeLoginRequest(BuildContext context) async {
       // Request successful
       final responseBody = jsonDecode(response.body);
       final user = User.fromJson(responseBody['user']);
-      print('User ID: ${user.id}');
-      // Navigator.pushNamed(context, MainAppView.id);
+      final token = responseBody['token'] as String;
+
+      UserPreferences.saveUser(user);
+      UserPreferences.saveToken(token);
+
+      print('Log User ID: ${user.id}');
+      Navigator.pushNamed(context, MainAppView.id);
 
 
     }

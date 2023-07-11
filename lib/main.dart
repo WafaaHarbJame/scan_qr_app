@@ -8,11 +8,18 @@ import 'package:bootcamp_starter/features/onbording/onbording_view.dart';
 import 'package:bootcamp_starter/features/profile/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/util/constants.dart';
+import 'features/auth/UserPreferences.dart';
 import 'features/profile/links/providers/links_provider.dart';
 
 void main() async {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await UserPreferences.init();
+  SharedPreferences.setMockInitialValues({});
+
+
   runApp(const MyApp());
 }
 
@@ -21,6 +28,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     // Initialize UserPreferences
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<LinkProvider>(

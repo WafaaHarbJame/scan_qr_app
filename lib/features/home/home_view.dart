@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../Scan QR/scanyourorcode.dart';
+import '../auth/UserPreferences.dart';
+import '../auth/user_model.dart';
 
 class HomeView extends StatelessWidget {
   static String id = '/homeView';
@@ -12,6 +14,10 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User? savedUser = UserPreferences.getUser();
+    if (savedUser != null) {
+      initData(savedUser);
+    }
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: Colors.transparent,
@@ -32,11 +38,11 @@ class HomeView extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Padding(
+           Padding(
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: Text(
-              "Hello, Ahmed! ",
-              style: TextStyle(
+              "Hello, ${savedUser?.name ?? ''}",
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 28,
               ),
@@ -65,6 +71,11 @@ class HomeView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void initData(User savedUser) {
+    print('Log  initData User ID: ${savedUser.name}');
+
   }
 }
 
