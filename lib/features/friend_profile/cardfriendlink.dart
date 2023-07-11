@@ -1,37 +1,34 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:bootcamp_starter/core/util/constants.dart';
 import 'package:bootcamp_starter/core/widgets/cardfriendlinks.dart';
 import 'package:bootcamp_starter/core/widgets/text_style.dart';
-class cardfriendlink extends StatefulWidget {
-  const cardfriendlink({Key? key}) : super(key: key);
 
-  @override
-  State<cardfriendlink> createState() => _cardfriendlinkState();
-}
+import '../profile/links/models/link_model.dart';
+class LinkList extends StatelessWidget {
+  final List<Link>? itemList;
 
-class _cardfriendlinkState extends State<cardfriendlink> {
+  const LinkList({required this.itemList});
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return ListView.builder(
         padding:EdgeInsets.only(left: 39,right: 38),
- child:Column(
-   children: [
-     cardfriendlinks( title: "Instagram",subtitle: "https://www.instagram.com/a7medhq/" ,colorcard:kLightDangerColor ,colortext: kOnLightDangerColor,),
-     SizedBox(
-       height: 35,
-     ),
-     cardfriendlinks( title: "Instagram",subtitle: "https://www.instagram.com/a7medhq/" ,colorcard:kLightPrimaryColor ,colortext: kPrimaryColor,),
-     SizedBox(
-       height: 35,
-     ),
-     cardfriendlinks( title: "Instagram",subtitle: "https://www.instagram.com/a7medhq/" ,colorcard:kLightDangerColor ,colortext: kOnLightDangerColor,),
-     SizedBox(
-       height: 35,
-     ),
-     cardfriendlinks( title: "Instagram",subtitle: "https://www.instagram.com/a7medhq/" ,colorcard:kLightPrimaryColor ,colortext: kPrimaryColor,),
-     SizedBox(
-       height: 35,
-     ),
+        shrinkWrap: true,
+        itemCount: itemList?.length ?? 0,
+        scrollDirection: Axis.vertical,
+        itemBuilder: (BuildContext context, int index)
+        {
+          return Column(
+            children: [
+              cardfriendlinks( title: itemList![index]?.title ?? "",
+                subtitle: itemList?[index].link ?? "",
+
+                colorcard:kLightDangerColor ,
+                colortext: kOnLightDangerColor,
+
+              ),
+
+              SizedBox(height: 20,)
 
 
 
@@ -39,12 +36,11 @@ class _cardfriendlinkState extends State<cardfriendlink> {
 
 
 
+            ],
+          );
 
+        }
 
-
-   ],
- )
     );
   }
 }
-
