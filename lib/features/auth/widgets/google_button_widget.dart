@@ -8,10 +8,11 @@ class GoogleButtonWidget extends StatelessWidget {
   final double? width;
 
   const GoogleButtonWidget({
-    super.key,
+    Key? key,
     required this.onTap,
     this.width = double.infinity,
-  });
+  }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class GoogleButtonWidget extends StatelessWidget {
         child: SizedBox(
           width: width,
           height: 50,
-          child: const Padding(
+          child:  Padding(
             padding: EdgeInsets.all(12.0),
             child: Row(
               children: [
