@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import '../../network/api_base_helper.dart'; // Import the helper class for API requests
+import '../auth/UserRepository.dart';
 
 class edit_link extends StatefulWidget {
   @override
@@ -30,11 +35,38 @@ OutlineInputBorder myfocusborder() {
 class _edit_linkState extends State<edit_link> {
   var name = "Text";
   String userName = '';
-  var passwardController = TextEditingController();
-
+  TextEditingController titleController = TextEditingController();
+  TextEditingController linkController = TextEditingController();
   var itemSelected;
   @override
   Widget build(BuildContext context) {
+    Future<void> updateLink() async {
+      String apiUrl = '/links/5'; // Update with the appropriate API endpoint
+
+      ApiBaseHelper apiHelper = ApiBaseHelper();
+      String userToken =
+          '737|25Xsv3PatZU9wcXRJmiZi7sFi4jr7baqW1v4FyHD'; // Replace with the actual user token
+
+      Map<String, String> headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Bearer $userToken',
+      };
+
+      Map<String, String> body = {
+        'title': titleController.text,
+        'link': linkController.text,
+        'username': 'aliahmed',
+        'isActive': '0',
+      };
+
+      try {
+        dynamic response = await apiHelper.put(apiUrl, body);
+        print('Link updated successfully');
+      } catch (e) {
+        print('Error updating link: $e');
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(213, 231, 229, 241),
@@ -100,24 +132,21 @@ class _edit_linkState extends State<edit_link> {
           Container(
             margin: const EdgeInsets.all(50),
             child: Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: const Color.fromARGB(255, 100, 69, 58),
-                  backgroundColor: const Color.fromARGB(220, 255, 212, 101),
-                  minimumSize: const Size(
-                    138,
-                    50,
-                  ),
-                ),
-                child: const Text(
-                  'Save',
-                  style: TextStyle(fontSize: 20.0),
-                ),
+                child: ElevatedButton(
+              onPressed: () {
+                updateLink();
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: const Color.fromARGB(255, 100, 69, 58),
+                backgroundColor: const Color.fromARGB(220, 255, 212, 101),
+                minimumSize: const Size(138, 50),
               ),
-            ),
+              child: const Text(
+                'Save',
+                style: TextStyle(fontSize: 20.0),
+              ),
+            )),
           ),
 
           /*TextField(
