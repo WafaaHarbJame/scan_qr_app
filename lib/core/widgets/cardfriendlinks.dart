@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:bootcamp_starter/core/util/constants.dart';
 import 'package:bootcamp_starter/core/widgets/text_style.dart';
 class cardfriendlinks extends StatelessWidget {
 final Color colorcard;

@@ -7,19 +7,23 @@ import 'package:bootcamp_starter/features/onbording/onbording_view.dart';
 import 'package:bootcamp_starter/features/profile/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/util/constants.dart';
+import 'features/auth/ShPreferences.dart';
 import 'features/profile/links/providers/links_provider.dart';
 
 void main() async {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+
     return MultiProvider(
         providers: [
           ChangeNotifierProvider<LinkProvider>(
@@ -39,6 +43,7 @@ class MyApp extends StatelessWidget {
                     color: kPrimaryColor),
               ),
               scaffoldBackgroundColor: kScaffoldColor),
+
           home: const OnBoardingView(),
           routes: {
             LoginView.id: (context) => LoginView(),
@@ -50,29 +55,29 @@ class MyApp extends StatelessWidget {
           },
         )
 
-      // return MaterialApp(
-      //   debugShowCheckedModeBanner: false,
-      //   title: 'Betweener',
-      //   theme: ThemeData(
-      //       useMaterial3: true,
-      //       colorSchemeSeed: kPrimaryColor,
-      //       appBarTheme: const AppBarTheme(
-      //         titleTextStyle: TextStyle(
-      //             fontSize: 24,
-      //             fontWeight: FontWeight.bold,
-      //             color: kPrimaryColor),
-      //       ),
-      //       scaffoldBackgroundColor: kScaffoldColor),
-      //   home: const OnBoardingView(),
-      //   routes: {
-      //     LoginView.id: (context) => LoginView(),
-      //     RegisterView.id: (context) => RegisterView(),
-      //     HomeView.id: (context) => const HomeView(),
-      //     MainAppView.id: (context) => const MainAppView(),
-      //     ProfileView2.id: (context) => const ProfileView(),
-      //     ReceiveView.id: (context) => const ReceiveView(),
-      //   },
-      // );
-    );
+        // return MaterialApp(
+        //   debugShowCheckedModeBanner: false,
+        //   title: 'Betweener',
+        //   theme: ThemeData(
+        //       useMaterial3: true,
+        //       colorSchemeSeed: kPrimaryColor,
+        //       appBarTheme: const AppBarTheme(
+        //         titleTextStyle: TextStyle(
+        //             fontSize: 24,
+        //             fontWeight: FontWeight.bold,
+        //             color: kPrimaryColor),
+        //       ),
+        //       scaffoldBackgroundColor: kScaffoldColor),
+        //   home: const OnBoardingView(),
+        //   routes: {
+        //     LoginView.id: (context) => LoginView(),
+        //     RegisterView.id: (context) => RegisterView(),
+        //     HomeView.id: (context) => const HomeView(),
+        //     MainAppView.id: (context) => const MainAppView(),
+        //     ProfileView2.id: (context) => const ProfileView(),
+        //     ReceiveView.id: (context) => const ReceiveView(),
+        //   },
+        // );
+        );
   }
 }

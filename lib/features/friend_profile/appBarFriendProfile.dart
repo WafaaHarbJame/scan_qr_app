@@ -18,7 +18,9 @@ class _AppBarfriendprofileState extends State<AppBarfriendprofile> {
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
               icon: Icon(Icons.arrow_back_ios, size: 24),
               color: kPrimaryColor),
           SizedBox(

@@ -1,11 +1,16 @@
 import 'package:bootcamp_starter/features/auth/register_view.dart';
+import 'package:bootcamp_starter/features/home/LinkListHome.dart';
 import 'package:bootcamp_starter/features/new_link/add_link_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../network/api_response.dart';
 import '../Scan QR/scanyourorcode.dart';
-import '../auth/UserPreferences.dart';
+import '../auth/ShPreferences.dart';
 import '../auth/user_model.dart';
+import '../friend_profile/cardfriendlink.dart';
+import '../profile/links/providers/links_provider.dart';
 
 class HomeView extends StatelessWidget {
   static String id = '/homeView';
@@ -15,6 +20,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User? savedUser = ShPreferences.getUser();
+    String? token = ShPreferences.getToken();
     if (savedUser != null) {
       initData(savedUser);
     }
@@ -67,7 +73,24 @@ class HomeView extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          CustomList(),
+          // CustomList(),
+          Consumer<LinkProvider>(
+            builder: (_, linkProviders, __) {
+              if (linkProviders.linkList.status == Status.LOADING) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (linkProviders.linkList.status == Status.ERROR) {
+                return Center(
+                  child: Text('${linkProviders.linkList.message}'),
+                );
+              }
+              return  LinkListHome(itemList: linkProviders.linkList.data);
+
+            },
+
+          )
         ],
       ),
     );

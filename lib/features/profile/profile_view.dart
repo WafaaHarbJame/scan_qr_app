@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../../core/util/constants.dart';
 import '../../core/util/styles.dart';
 import '../../network/api_response.dart';
-import '../auth/UserPreferences.dart';
+import '../auth/ShPreferences.dart';
 import '../auth/user_model.dart';
 import '../edit_user_info/edit_user_info.dart';
 import 'links/providers/links_provider.dart';
@@ -323,6 +323,8 @@ class LinksListItem extends StatelessWidget {
 
 class CardProfile extends StatelessWidget {
   User? savedUser = ShPreferences.getUser();
+
+  CardProfile({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bootcamp_starter/core/util/constants.dart';
 import 'package:bootcamp_starter/core/widgets/cardfriendlinks.dart';
-import 'package:bootcamp_starter/core/widgets/text_style.dart';
 
 import '../profile/links/models/link_model.dart';
 class LinkList extends StatelessWidget {

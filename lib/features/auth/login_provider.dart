@@ -1,6 +1,7 @@
-import 'package:bootcamp_starter/features/auth/UserPreferences.dart';
+import 'package:bootcamp_starter/features/auth/ShPreferences.dart';
 import 'package:bootcamp_starter/features/auth/UserRepository.dart';
 import 'package:bootcamp_starter/features/auth/user_model.dart';
+import 'package:flutter/foundation.dart';
 import '../../../../network/api_response.dart';
 
 
@@ -40,9 +41,10 @@ class LoginProvider {
     userApiResponse = ApiResponse.loading('login');
     try {
       UserResponse user = await userRepository.login("/login",userName,password);
-      userApiResponse = ApiResponse.completed(user.user,);
       ShPreferences.saveUser(user.user);
       ShPreferences.saveToken(user.token);
+      userApiResponse = ApiResponse.completed(user.user,);
+
 
 
     } catch (e) {

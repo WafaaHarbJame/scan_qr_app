@@ -6,6 +6,10 @@ abstract class Styles {
       OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: kPrimaryColor, width: 2));
+  static OutlineInputBorder redRoundedOutlineInputBorder =
+      OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.redAccent, width: 2));
 
   static const textStyle14 = TextStyle(
       fontSize: 14, fontWeight: FontWeight.w500, color: kPrimaryColor);

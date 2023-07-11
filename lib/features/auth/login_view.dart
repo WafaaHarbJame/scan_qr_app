@@ -12,7 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../network/api_response.dart';
 import '../main_app/main_app_view.dart';
-import 'UserPreferences.dart';
+import 'ShPreferences.dart';
 import 'widgets/google_button_widget.dart';
 import 'package:http/http.dart' as http;
 
@@ -29,6 +29,7 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController emailController = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -40,122 +41,99 @@ class _LoginViewState extends State<LoginView> {
         padding: const EdgeInsets.symmetric(horizontal: 32.0),
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
-          child: Column(
-            children: [
-              const Spacer(),
-              SizedBox(
-                  height: MediaQuery.of(context).size.height / 5,
-                  child: Hero(
-                      tag: 'authImage',
-                      child: SvgPicture.asset(AssetsData.authImage))),
-              const Spacer(),
-              PrimaryLabeledTextFieldWidget(
-                controller: emailController,
-                hint: 'example@gmail.com',
-                keyboardType: TextInputType.emailAddress,
-                label: 'Email',
-              ),
-              const SizedBox(
-                height: 14,
-              ),
-              PrimaryLabeledTextFieldWidget(
-                controller: passwordController,
-                hint: 'Enter password',
-                label: 'password',
-                password: true,
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              SecondaryButtonWidget(
-                  onTap: () async {
-
-                    // if(emailController.text.isNotEmpty && passwordController.text.isNotEmpty){
-                      print("Log empty data");
-                      try {
-                        ApiResponse<User> userApiResponse = await LoginProvider()
-                            .loginUser(
-                            emailController.text, passwordController.text);
-                        if (userApiResponse.status == Status.LOADING) {
-                          return const CircularProgressIndicator(
-                            color: Colors.blue,
-                          );
-                        } else if (userApiResponse.status == Status.COMPLETED) {
-                          Navigator.pushNamed(context, MainAppView.id);
-                        } else if (userApiResponse.status == Status.ERROR) {
-                          AlertDialog(
-                            title: const Text('AlertDialog Title'),
-                            content: const SingleChildScrollView(
-                              child: ListBody(
-                                children: <Widget>[
-                                  Text('Login'),
-                                  Text('Login Error'),
-                                ],
-                              ),
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text('ok'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
+          child: Form(
+            key: _formkey,
+            child: Column(
+              children: [
+                const Spacer(),
+                SizedBox(
+                    height: MediaQuery.of(context).size.height / 5,
+                    child: Hero(
+                        tag: 'authImage',
+                        child: SvgPicture.asset(AssetsData.authImage))),
+                const Spacer(),
+                PrimaryLabeledTextFieldWidget(
+                  controller: emailController,
+                  validator: (value) {
+                    if (value != null && value.isEmpty) {
+                      return "Enter user name!";
+                    }
+                    return null;
+                  },
+                  hint: 'example@gmail.com',
+                  keyboardType: TextInputType.emailAddress,
+                  label: 'Email',
+                ),
+                const SizedBox(
+                  height: 14,
+                ),
+                PrimaryLabeledTextFieldWidget(
+                  controller: passwordController,
+                  validator: (value) {
+                    if (value != null && value.isEmpty) {
+                      return "Enter Password!";
+                    }
+                    return null;
+                  },
+                  hint: 'Enter password',
+                  label: 'password',
+                  password: true,
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                SecondaryButtonWidget(
+                    onTap: () async {
+                      if (_formkey.currentState!.validate()) {
+                        try {
+                          ApiResponse<User> userApiResponse =
+                          await LoginProvider().loginUser(
+                              emailController.text,
+                              passwordController.text);
+                          if (userApiResponse.status == Status.LOADING) {
+                            return const CircularProgressIndicator(
+                              color: Colors.blue,
+                            );
+                          } else if (userApiResponse.status == Status.COMPLETED) {
+                            Navigator.pushNamed(context, MainAppView.id);
+                          } else if (userApiResponse.status == Status.ERROR) {
+                            print("Error status");
+                          }
+                        } catch (e) {
+                          // An error occurred
+                          print('Log An error occurred: $e');
                         }
-                      } catch (e) {
-                        // An error occurred
-                        print('Log An error occurred: $e');
+                      } else {
+                        debugPrint("Name is ${emailController.text}");
+                        debugPrint("password is ${passwordController.text}");
                       }
-
-                 //   }
-                 //    else{
-                 //      AlertDialog(
-                 //        title: const Text('Login'),
-                 //        content: const SingleChildScrollView(
-                 //          child: ListBody(
-                 //            children: <Widget>[
-                 //              Text('Data empty'),
-                 //            ],
-                 //          ),
-                 //        ),
-                 //        actions: <Widget>[
-                 //          TextButton(
-                 //            child: const Text('ok'),
-                 //            onPressed: () {
-                 //              Navigator.of(context).pop();
-                 //            },
-                 //          ),
-                 //        ],
-                 //      );
-                 //    }
-                    // makeLoginRequest1(context);
-                  },
-                  text: 'LOGIN'),
-              const SizedBox(
-                height: 24,
-              ),
-              PrimaryOutlinedButtonWidget(
-                  onTap: () {
-                    Navigator.pushNamed(context, RegisterView.id);
-                  },
-                  text: 'REGISTER'),
-              const SizedBox(
-                height: 12,
-              ),
-              Text(
-                '-  or  -',
-                style: TextStyle(
-                    color: Colors.grey.shade500,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w300),
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              GoogleButtonWidget(onTap: () {}),
-              const Spacer(),
-            ],
+                    },
+                    text: 'LOGIN'),
+                const SizedBox(
+                  height: 24,
+                ),
+                PrimaryOutlinedButtonWidget(
+                    onTap: () {
+                      Navigator.pushNamed(context, RegisterView.id);
+                    },
+                    text: 'REGISTER'),
+                const SizedBox(
+                  height: 12,
+                ),
+                Text(
+                  '-  or  -',
+                  style: TextStyle(
+                      color: Colors.grey.shade500,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w300),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                GoogleButtonWidget(onTap: () {}),
+                const Spacer(),
+              ],
+            ),
           ),
         ),
       ),
@@ -163,35 +141,29 @@ class _LoginViewState extends State<LoginView> {
   }
 }
 
-// Future<void> makeLoginRequest1(context) async {
-//   try {
-//     ApiResponse<User> userApiResponse = await LoginProvider().loginUser(email);
-//     if (userApiResponse.status == Status.LOADING) {
-//     } else if (userApiResponse.status == Status.COMPLETED) {
-//       Navigator.pushNamed(context, MainAppView.id);
-//     } else if (userApiResponse.status == Status.ERROR) {
-//       AlertDialog(
-//         title: const Text('AlertDialog Title'),
-//         content: const SingleChildScrollView(
-//           child: ListBody(
-//             children: <Widget>[
-//               Text('Login'),
-//               Text('Login Error'),
-//             ],
-//           ),
-//         ),
-//         actions: <Widget>[
-//           TextButton(
-//             child: const Text('ok'),
-//             onPressed: () {
-//               Navigator.of(context).pop();
-//             },
-//           ),
-//         ],
-//       );
-//     }
-//   } catch (e) {
-//     // An error occurred
-//     print('Log An error occurred: $e');
-//   }
-// }
+class ShowAlert extends StatelessWidget {
+  const ShowAlert({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('AlertDialog Title'),
+      content: const SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            Text('Login'),
+            Text('Login Error'),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: const Text('ok'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  }
+}
