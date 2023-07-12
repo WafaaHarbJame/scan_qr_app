@@ -20,9 +20,13 @@ void main() async {
 class MyApp extends StatelessWidget {
 
   MyApp({super.key});
+  bool isUserLoggedIn = false; // Assuming initially the user is not logged in
 
   @override
   Widget build(BuildContext context) {
+    ShPreferences.init();
+    isUserLoggedIn = ShPreferences.getUser() != null;
+
 
     return MultiProvider(
         providers: [
@@ -44,7 +48,7 @@ class MyApp extends StatelessWidget {
               ),
               scaffoldBackgroundColor: kScaffoldColor),
 
-          home: const OnBoardingView(),
+          home: isUserLoggedIn ? const MainAppView() : const OnBoardingView(),
           routes: {
             LoginView.id: (context) => LoginView(),
             RegisterView.id: (context) => RegisterView(),
