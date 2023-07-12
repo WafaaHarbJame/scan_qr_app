@@ -5,6 +5,8 @@ import 'package:bootcamp_starter/core/widgets/text_style.dart';
 
 class secandLabeledTextFieldWidget extends StatelessWidget {
   final String label;
+  final Function(String)? onChanged;
+
   final String? hint;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
@@ -13,7 +15,11 @@ class secandLabeledTextFieldWidget extends StatelessWidget {
         required this.label,
         this.controller,
         required this.hint,
-        this.keyboardType});
+        this.keyboardType,
+        this.onChanged,
+
+
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +33,7 @@ class secandLabeledTextFieldWidget extends StatelessWidget {
         SizedBox(
           height: 50,
           child: TextField(
+            onChanged: onChanged,
 
             keyboardType: keyboardType,
             controller: controller,
