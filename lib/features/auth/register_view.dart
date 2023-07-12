@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bootcamp_starter/core/util/assets.dart';
 import 'package:bootcamp_starter/core/widgets/custom_labeled_textfield_widget.dart';
 import 'package:bootcamp_starter/core/widgets/secondary_button_widget.dart';
@@ -6,15 +7,56 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'widgets/google_button_widget.dart';
 
-class RegisterView extends StatelessWidget {
+class RegisterView extends StatefulWidget {
   static String id = '/registerView';
 
-  TextEditingController nameController = TextEditingController(text: 'ss');
-  TextEditingController emailController =
-      TextEditingController(text: 'ss@ss.com');
-  TextEditingController passwordController = TextEditingController(text: '123');
+  RegisterView({Key? key}) : super(key: key);
 
-  RegisterView({super.key});
+  @override
+  _RegisterViewState createState() => _RegisterViewState();
+}
+
+class _RegisterViewState extends State<RegisterView> {
+  late TextEditingController nameController;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    _loadData();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _saveData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('name', nameController.text);
+    await prefs.setString('email', emailController.text);
+    await prefs.setString('password', passwordController.text);
+  }
+
+  Future<void> _loadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? name = prefs.getString('name');
+    String? email = prefs.getString('email');
+    String? password = prefs.getString('password');
+
+    setState(() {
+      nameController.text = name ?? '';
+      emailController.text = email ?? '';
+      passwordController.text = password ?? '';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +68,6 @@ class RegisterView extends StatelessWidget {
             Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back_ios),
-          //replace with our own icon data.
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -42,10 +83,12 @@ class RegisterView extends StatelessWidget {
               children: [
                 const Spacer(),
                 SizedBox(
-                    height: MediaQuery.of(context).size.height / 8,
-                    child: Hero(
-                        tag: 'authImage',
-                        child: SvgPicture.asset(AssetsData.authImage))),
+                  height: MediaQuery.of(context).size.height / 8,
+                  child: Hero(
+                    tag: 'authImage',
+                    child: SvgPicture.asset(AssetsData.authImage),
+                  ),
+                ),
                 const SizedBox(
                   height: 24,
                 ),
@@ -68,27 +111,53 @@ class RegisterView extends StatelessWidget {
                 PrimaryLabeledTextFieldWidget(
                   controller: passwordController,
                   hint: 'Enter password',
-                  label: 'password',
+                  label: 'Password',
                   password: true,
                 ),
                 const SizedBox(
                   height: 24,
                 ),
-                SecondaryButtonWidget(onTap: () {}, text: 'REGISTER'),
+                SecondaryButtonWidget(
+                  onTap: () {
+                    _saveData();
+                    // Add any other logic you want to perform on button tap
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Registration Successful'),
+                        content: const Text('User registered successfully!'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  text: 'REGISTER',
+                ),
                 const SizedBox(
                   height: 12,
                 ),
                 Text(
                   '-  or  -',
                   style: TextStyle(
-                      color: Colors.grey.shade500,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w300),
+                    color: Colors.grey.shade500,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w300,
+                  ),
                 ),
                 const SizedBox(
                   height: 12,
                 ),
-                GoogleButtonWidget(onTap: () {}),
+                GoogleButtonWidget(
+                  onTap: () {
+                    // Handle Google button tap
+                  },
+                ),
                 const Spacer(),
               ],
             ),
