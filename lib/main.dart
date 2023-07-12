@@ -1,3 +1,4 @@
+import 'package:bootcamp_starter/features/active_share/providers/active_share_provider.dart';
 import 'package:bootcamp_starter/features/active_share/receive_view.dart';
 import 'package:bootcamp_starter/features/auth/login_view.dart';
 import 'package:bootcamp_starter/features/auth/register_view.dart';
@@ -29,6 +30,9 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider<LinkProvider>(
             create: (_) => LinkProvider(),
           ),
+          ChangeNotifierProvider<ActiveSharingProvider>(
+            create: (_) => ActiveSharingProvider(),
+          )
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

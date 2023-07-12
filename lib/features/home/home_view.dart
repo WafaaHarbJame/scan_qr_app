@@ -1,29 +1,36 @@
-import 'package:bootcamp_starter/features/auth/register_view.dart';
+import 'dart:ffi';
+
+import 'package:bootcamp_starter/features/active_share/providers/active_share_provider.dart';
 import 'package:bootcamp_starter/features/home/LinkListHome.dart';
 import 'package:bootcamp_starter/features/new_link/add_link_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../core/util/constants.dart';
 import '../../network/api_response.dart';
 import '../Scan QR/scanyourorcode.dart';
+import '../active_share/ActiveSharing.dart';
+import '../active_share/Active_sharing_model.dart';
 import '../auth/ShPreferences.dart';
 import '../auth/user_model.dart';
-import '../friend_profile/cardfriendlink.dart';
 import '../profile/links/providers/links_provider.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   static String id = '/homeView';
 
   const HomeView({super.key});
 
   @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  User? savedUser = ShPreferences.getUser();
+  bool isCompleted = false; // Initial value of isCompleted flag
+
+  @override
   Widget build(BuildContext context) {
-    User? savedUser = ShPreferences.getUser();
-    String? token = ShPreferences.getToken();
-    if (savedUser != null) {
-      initData(savedUser);
-    }
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: Colors.transparent,
@@ -44,7 +51,7 @@ class HomeView extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-           Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: Text(
               "Hello, ${savedUser?.name ?? ''}",
@@ -57,11 +64,28 @@ class HomeView extends StatelessWidget {
           Container(
             alignment: Alignment.center,
             margin: const EdgeInsets.all(30),
-            child: QrImageView(
-              data: 'This is a simple QR code',
-              version: QrVersions.auto,
-              size: 280,
-              gapless: false,
+            decoration: BoxDecoration(
+              border: isCompleted
+                  ? Border.all(
+                      color: Colors.green, // Set the desired border color
+                      width: 2.0, // Set the desired border width
+                    )
+                  : null, // No border if not completed
+            ),
+            child: GestureDetector(
+              onTap: () async {
+                makeShare(context,true);
+              },
+              onDoubleTap: () {
+                makeShare(context,false);
+
+              },
+              child: QrImageView(
+                data: 'This is a simple QR code',
+                version: QrVersions.auto,
+                size: 280,
+                gapless: false,
+              ),
             ),
           ),
           const Divider(
@@ -86,19 +110,42 @@ class HomeView extends StatelessWidget {
                   child: Text('${linkProviders.linkList.message}'),
                 );
               }
-              return  LinkListHome(itemList: linkProviders.linkList.data);
-
+              return LinkListHome(itemList: linkProviders.linkList.data);
             },
-
           )
         ],
       ),
     );
   }
 
-  void initData(User savedUser) {
-    print('Log  initData User ID: ${savedUser.name}');
+  // void initData(User savedUser) {
+  //   print('Log  initData User ID: ${savedUser.name}');
+  // }
 
+  Future<void> makeShare(BuildContext context,bool isShare ) async {
+    try {
+      ApiResponse<ActiveSharingResponse> apiResponse =
+          await ActiveSharingProvider1().activeShare("sender");
+      if (apiResponse.status == Status.LOADING) {
+      } else if (apiResponse.status == Status.COMPLETED) {
+        print("Log share COMPLETED ${apiResponse.data?.activeSharing?.id}");
+        setState(() {
+          if(isShare){
+            isCompleted = true;
+
+          }
+          else{
+            isCompleted = false;
+
+          }
+        });
+      } else if (apiResponse.status == Status.ERROR) {
+        print("Log share Error status ${apiResponse.message}");
+      }
+    } catch (e) {
+      // An error occurred
+      print('Log An error occurred: $e');
+    }
   }
 }
 
@@ -195,3 +242,30 @@ class AddItem extends StatelessWidget {
     );
   }
 }
+
+// Consumer<ActiveSharingProvider>(
+//   builder: (_, activeSharingProvider, __) {
+//     if (activeSharingProvider.activeSharing().status ==
+//         Status.LOADING) {}
+//     if (activeSharingProvider.activeSharing().status ==
+//         Status.ERROR) {
+//       print('Log ${activeSharingProvider.activeSharing().message}');
+//     }
+//     // if (activeSharingProvider.activeSharing().status ==
+//     //     Status.COMPLETED) {
+//     //   print('Log ${activeSharingProvider.activeShare.data}');
+//     // }
+//     return Container(
+//       decoration: BoxDecoration(
+//         color: kLightPrimaryColor,
+//         borderRadius: BorderRadius.circular(10),
+//       ),
+//       child: QrImageView(
+//         data: 'This is a simple QR code',
+//         version: QrVersions.auto,
+//         size: 280,
+//         gapless: false,
+//       ),
+//     );
+//   },
+// );
