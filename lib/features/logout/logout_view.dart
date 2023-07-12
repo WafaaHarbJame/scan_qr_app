@@ -11,23 +11,23 @@ import '../../network/api_response.dart';
 import '../auth/ShPreferences.dart';
 import '../auth/user_model.dart';
 import '../edit_user_info/edit_user_info.dart';
-import 'links/providers/links_provider.dart';
+import '../profile/links/providers/links_provider.dart';
 
-class ProfileView extends StatefulWidget {
+class LogoutView extends StatefulWidget {
   static const id = '/profileView';
 
-  const ProfileView({super.key});
+  const LogoutView({super.key});
 
   @override
-  State<ProfileView> createState() => _ProfileViewState();
+  State<LogoutView> createState() => _LogoutViewState();
 
   @override
   Widget build(BuildContext context) {
-    return const ProfileView();
+    return const LogoutView();
   }
 }
 
-class _ProfileViewState extends State<ProfileView> {
+class _LogoutViewState extends State<LogoutView> {
   @override
   void initState() {
     super.initState();

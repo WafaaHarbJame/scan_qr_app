@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import '../features/auth/ShPreferences.dart';
 import 'app_exception.dart';
 
 class ApiBaseHelper {
@@ -36,9 +37,12 @@ class ApiBaseHelper {
 
   Future<dynamic> put(String url, Map<String, dynamic> body) async {
     var responseJson;
+    String? token = ShPreferences.getToken();
+
     try {
       final response = await http.put(
-        Uri.parse(_baseUrl + url),
+        Uri.parse(_baseUrl + url),headers: {'Authorization': 'Bearer $token',
+        },
         body: body,
       );
       responseJson = _returnResponse(response);

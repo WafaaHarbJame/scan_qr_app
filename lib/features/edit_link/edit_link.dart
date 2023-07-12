@@ -1,9 +1,25 @@
+import 'package:bootcamp_starter/features/edit_link/EditLink.dart';
+import 'package:bootcamp_starter/features/edit_link/edit_link_provider.dart';
+import 'package:bootcamp_starter/features/profile/links/models/link_model.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import '../../network/api_base_helper.dart'; // Import the helper class for API requests
+import '../../network/api_response.dart';
+import '../auth/ShPreferences.dart';
+import '../auth/UserRepository.dart';
+import '../auth/user_model.dart';
 
 class edit_link extends StatefulWidget {
+  Link? itemData;
+    edit_link({itemData});
+
+
   @override
   State<StatefulWidget> createState() {
-    return _edit_linkState();
+    return _edit_linkState(this.itemData!);
   }
 }
 
@@ -30,11 +46,18 @@ OutlineInputBorder myfocusborder() {
 class _edit_linkState extends State<edit_link> {
   var name = "Text";
   String userName = '';
-  var passwardController = TextEditingController();
-
+  TextEditingController titleController = TextEditingController();
+  TextEditingController linkController = TextEditingController();
   var itemSelected;
+  User? savedUser = ShPreferences.getUser();
+  Link? itemData;
+
+  _edit_linkState(this.itemData);
+
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(213, 231, 229, 241),
@@ -71,6 +94,7 @@ class _edit_linkState extends State<edit_link> {
             ),
           ),
           TextField(
+              controller: titleController,
               decoration: InputDecoration(
             hintText: "title",
             border: myinputborder(), //normal border
@@ -90,6 +114,7 @@ class _edit_linkState extends State<edit_link> {
             ),
           ),
           TextField(
+            controller: linkController,
               decoration: InputDecoration(
             hintText: "link",
             border: myinputborder(), //normal border
@@ -100,24 +125,47 @@ class _edit_linkState extends State<edit_link> {
           Container(
             margin: const EdgeInsets.all(50),
             child: Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: const Color.fromARGB(255, 100, 69, 58),
-                  backgroundColor: const Color.fromARGB(220, 255, 212, 101),
-                  minimumSize: const Size(
-                    138,
-                    50,
-                  ),
-                ),
-                child: const Text(
-                  'Save',
-                  style: TextStyle(fontSize: 20.0),
-                ),
+                child: ElevatedButton(
+              onPressed: () async {
+                try {
+                  ApiResponse<EditLink> userApiResponse =
+                      await EditLinkProvider().editLink(
+                          193,
+                          titleController.text,
+                          linkController.text,
+                          userName,
+                          0);
+                  if (userApiResponse.status == Status.LOADING) {
+                  } else if (userApiResponse.status == Status.COMPLETED) {
+                    Fluttertoast.showToast(
+                        msg: userApiResponse.data!.message.toString(),
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.yellow);
+                    print("Log COMPLETED status${userApiResponse.data?.message}");
+                    Navigator.pop(context);
+
+                  } else if (userApiResponse.status == Status.ERROR) {
+                    print("Log Error status${userApiResponse.data?.message}");
+                  }
+                } catch (e) {
+                  // An error occurred
+                  print('Log An error occurred: $e');
+                }
+                // Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: const Color.fromARGB(255, 100, 69, 58),
+                backgroundColor: const Color.fromARGB(220, 255, 212, 101),
+                minimumSize: const Size(138, 50),
               ),
-            ),
+              child: const Text(
+                'Save',
+                style: TextStyle(fontSize: 20.0),
+              ),
+            )),
           ),
 
           /*TextField(
