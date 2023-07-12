@@ -9,10 +9,12 @@ class LinkProvider extends ChangeNotifier {
   late ApiResponse<List<Link>> _linkList;
 
   ApiResponse<List<Link>> get linkList => _linkList;
+  ApiResponse<List<AddLink>> get bodyaddlink => bodyaddlink;
 
   LinkProvider() {
     _linkRepository = LinkRepository();
     fetchLinkList();
+    addLink();
   }
 
   fetchLinkList() async {
@@ -27,4 +29,25 @@ class LinkProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+
+
+
+
+
+  addLink() async {
+    _linkList = ApiResponse.loading('Fetching Links');
+    notifyListeners();
+    try {
+      List<Link> links = await _linkRepository.fetchLinkList();
+      _linkList = ApiResponse.completed(links);
+      notifyListeners();
+    } catch (e) {
+      _linkList = ApiResponse.error(e.toString());
+      notifyListeners();
+    }
+  }
+
+
 }
