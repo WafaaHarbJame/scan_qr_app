@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:bootcamp_starter/features/active_share/providers/active_share_provider.dart';
 import 'package:bootcamp_starter/features/home/LinkListHome.dart';
 import 'package:bootcamp_starter/features/new_link/add_link_screen.dart';
+import 'package:bootcamp_starter/features/onbording/onbording_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -40,12 +41,16 @@ class _HomeViewState extends State<HomeView> {
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
           IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ScanyourQRCode()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ScanyourQRCode()));
               },
-              icon: const Icon(Icons.qr_code_scanner))
+              icon: const Icon(Icons.qr_code_scanner)),
+          IconButton(
+              iconSize: 40,
+              onPressed: () {
+                showLogoutConfirmationDialog(context);
+              },
+              icon: const Icon(Icons.logout))
         ],
       ),
       body: Column(
@@ -74,11 +79,10 @@ class _HomeViewState extends State<HomeView> {
             ),
             child: GestureDetector(
               onTap: () async {
-                makeShare(context,true);
+                makeShare(context, true);
               },
               onDoubleTap: () {
-                makeShare(context,false);
-
+                makeShare(context, false);
               },
               child: QrImageView(
                 data: 'This is a simple QR code',
@@ -110,7 +114,52 @@ class _HomeViewState extends State<HomeView> {
                   child: Text('${linkProviders.linkList.message}'),
                 );
               }
-              return LinkListHome(itemList: linkProviders.linkList.data);
+
+              final itemList = linkProviders.linkList.data;
+              return Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        LinkListHome(itemList: itemList?.take(2).toList()),
+                        if (itemList != null && itemList.length > 2) SizedBox(height: 2),
+                         AddItem(),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+              return Row(
+                children: [
+                  Expanded(
+                    child: LinkListHome(itemList: itemList?.take(2).toList()),
+                  ),
+                  if (itemList != null && itemList.length >= 2) SizedBox(width: 8),
+                  AddItem(),
+                ],
+              );
+
+              // return Row(
+              //   children: [
+              //     Expanded(
+              //       child: LinkListHome(itemList: itemList?.take(2).toList()),
+              //     ),
+              //     if (itemList != null && itemList.length >= 2) Spacer(),
+              //     if (itemList != null && itemList.length <= 2) Expanded(child: AddItem()),
+              //   ],
+              // );
+              // return Row(
+              //   children: [
+              //     Expanded(
+              //       child: LinkListHome(itemList: itemList?.take(2).toList()),
+              //     ),
+              //     AddItem(),
+              //   ],
+              // );
+              //
+              // //return LinkListHome(itemList: itemsToShow);
+              // return LinkListHome(itemList: linkProviders.linkList.data?.take(2).toList());
             },
           )
         ],
@@ -122,7 +171,7 @@ class _HomeViewState extends State<HomeView> {
   //   print('Log  initData User ID: ${savedUser.name}');
   // }
 
-  Future<void> makeShare(BuildContext context,bool isShare ) async {
+  Future<void> makeShare(BuildContext context, bool isShare) async {
     try {
       ApiResponse<ActiveSharingResponse> apiResponse =
           await ActiveSharingProvider1().activeShare("sender");
@@ -130,13 +179,10 @@ class _HomeViewState extends State<HomeView> {
       } else if (apiResponse.status == Status.COMPLETED) {
         print("Log share COMPLETED ${apiResponse.data?.activeSharing?.id}");
         setState(() {
-          if(isShare){
+          if (isShare) {
             isCompleted = true;
-
-          }
-          else{
+          } else {
             isCompleted = false;
-
           }
         });
       } else if (apiResponse.status == Status.ERROR) {
@@ -147,6 +193,60 @@ class _HomeViewState extends State<HomeView> {
       print('Log An error occurred: $e');
     }
   }
+
+  void logoutAndClearData(BuildContext context) {
+    // Clear shared preferences data
+    ShPreferences.saveUser(null);
+    ShPreferences.saveToken(null);
+
+    // Navigate to the login or home screen
+    // Replace `LoginScreen` with your desired screen
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (BuildContext context) => OnBoardingView()),
+      (route) => false,
+    );
+  }
+}
+
+void showLogoutConfirmationDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext dialogContext) {
+      return AlertDialog(
+        title: Text('Confirm Logout'),
+        content: Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop(); // Close the dialog
+            },
+            child: Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              logoutAndClearData(context);
+            },
+            child: Text('Logout'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void logoutAndClearData(BuildContext context) {
+  // Clear shared preferences data
+  ShPreferences.saveUser(null);
+  ShPreferences.saveToken(null);
+
+  // Navigate to the login or home screen
+  // Replace `LoginScreen` with your desired screen
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (BuildContext context) => OnBoardingView()),
+    (route) => false,
+  );
 }
 
 class CustomList extends StatelessWidget {

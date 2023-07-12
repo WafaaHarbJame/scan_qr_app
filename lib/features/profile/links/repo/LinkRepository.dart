@@ -1,4 +1,5 @@
 import '../../../../network/api_base_helper.dart';
+import '../../../active_share/NearstSharingResponse.dart';
 import '../../../auth/ShPreferences.dart';
 import '../models/link_model.dart';
 
@@ -14,6 +15,14 @@ class LinkRepository {
       'Authorization': 'Bearer $token',
     });
     return LinkResponse.fromJson(response).results;
+  }
+
+
+  Future<List<NearestUsers>?> fetchNearLinkList() async {
+    final response = await _helper.get("/activeShare/nearest/1", {
+      'Authorization': 'Bearer $token',
+    });
+    return NearstSharingResponse.fromJson(response).nearestUsers;
   }
 
   Future<dynamic> addLink(String url, String title, String link,

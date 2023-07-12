@@ -1,3 +1,4 @@
+import 'package:bootcamp_starter/features/active_share/NearstSharingResponse.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../../network/api_response.dart';
 import '../../../new_link/AddLink Response.dart';
@@ -8,6 +9,7 @@ class LinkProvider extends ChangeNotifier {
   late LinkRepository _linkRepository;
 
   late ApiResponse<List<Link>> _linkList;
+  late ApiResponse<List<NearestUsers>> _linkNearList;
   late ApiResponse<AddLinkResponse> _linkObject;
 
   ApiResponse<List<Link>> get linkList => _linkList;
@@ -16,6 +18,7 @@ class LinkProvider extends ChangeNotifier {
   LinkProvider() {
     _linkRepository = LinkRepository();
     fetchLinkList();
+    fetchNearLinkList();
   }
 
   fetchLinkList() async {
@@ -31,6 +34,19 @@ class LinkProvider extends ChangeNotifier {
     }
   }
 
+
+  fetchNearLinkList() async {
+    _linkNearList = ApiResponse.loading('Fetching Links');
+    notifyListeners();
+    try {
+      List<NearestUsers>? links = await _linkRepository.fetchNearLinkList();
+      _linkNearList = ApiResponse.completed(links);
+      notifyListeners();
+    } catch (e) {
+      _linkNearList = ApiResponse.error(e.toString());
+      notifyListeners();
+    }
+  }
 
 
 

@@ -40,6 +40,7 @@ dependencies:
   pretty_http_logger:
   shared_preferences: ^2.0.10
   fluttertoast:
+  flutter_barcode_scanner:
 
 
   # The following adds the Cupertino Icons font to your application.
