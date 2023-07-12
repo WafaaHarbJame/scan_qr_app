@@ -14,6 +14,8 @@ import 'features/auth/ShPreferences.dart';
 import 'features/profile/links/providers/links_provider.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await ShPreferences.init();
   runApp(MyApp());
 }
 
@@ -24,8 +26,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ShPreferences.init();
-    // isUserLoggedIn = ShPreferences.getUser() != null;
+    ShPreferences.init();
+    isUserLoggedIn = ShPreferences.getUser() != null;
 
 
     return MultiProvider(

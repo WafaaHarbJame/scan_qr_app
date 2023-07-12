@@ -275,10 +275,10 @@ class LinksListItem extends StatelessWidget {
           ),
           SlidableAction(
             onPressed: (context) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => edit_link()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => edit_link()),
+              // );
             },
             flex: 1,
             backgroundColor: kSecondaryColor,
