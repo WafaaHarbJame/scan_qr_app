@@ -27,10 +27,8 @@ class HomeView extends StatelessWidget {
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
           IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ScanyourQRCode()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ScanyourQRCode()));
               },
               icon: const Icon(Icons.qr_code_scanner))
         ],
@@ -38,7 +36,7 @@ class HomeView extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-           Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: Text(
               "Hello, ${savedUser?.name ?? ''}",
@@ -75,7 +73,6 @@ class HomeView extends StatelessWidget {
 
   void initData(User savedUser) {
     print('Log  initData User ID: ${savedUser.name}');
-
   }
 }
 
