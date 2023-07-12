@@ -8,7 +8,6 @@ import 'package:bootcamp_starter/features/onbording/onbording_view.dart';
 import 'package:bootcamp_starter/features/profile/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/util/constants.dart';
 import 'features/auth/ShPreferences.dart';
@@ -25,8 +24,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ShPreferences.init();
-    isUserLoggedIn = ShPreferences.getUser() != null;
+    // ShPreferences.init();
+    // isUserLoggedIn = ShPreferences.getUser() != null;
 
 
     return MultiProvider(

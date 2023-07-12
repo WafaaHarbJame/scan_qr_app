@@ -8,20 +8,27 @@ import 'package:bootcamp_starter/core/widgets/secand_Labeled_TextField_Widget.da
 import 'package:bootcamp_starter/core/widgets/secondary_button_widget.dart';
 import 'package:bootcamp_starter/core/widgets/text_style.dart';
 import 'package:provider/provider.dart';
+
+import '../auth/ShPreferences.dart';
+import '../auth/user_model.dart';
 class bodyaddlink extends StatefulWidget {
-  const bodyaddlink({Key? key}) : super(key: key);
+   bodyaddlink({Key? key}) : super(key: key);
 
   @override
   State<bodyaddlink> createState() => _bodyaddlinkState();
 }
  late String title, link ;
 class _bodyaddlinkState extends State<bodyaddlink> {
+  User? savedUser = ShPreferences.getUser();
+
   @override
 
   TextEditingController _textFieldControllertitle = TextEditingController();
   TextEditingController _textFieldControllerlink = TextEditingController();
 late String title , link ;
   Widget build(BuildContext context) {
+    ShPreferences.init();
+
     return Padding(
           padding:EdgeInsets.only(top: 90,left: 43,right: 43)
               ,
@@ -69,10 +76,11 @@ late String title , link ;
                   String enteredValue = _textFieldControllertitle.text;
                   String enteredValuetwo = _textFieldControllerlink.text;
 
-                  Provider.of<LinkProvider>(context, listen: false).addLink();
+                  Provider.of<LinkProvider>(context, listen: false).addLink("/links",
+                  title,link,savedUser!.name??"",0);
 
                   _textFieldControllertitle.clear();
-                   AddLink(title: title!, link: link!);
+                   // AddLink(title: title, link: link);
 
                   _textFieldControllerlink.clear();
                 },

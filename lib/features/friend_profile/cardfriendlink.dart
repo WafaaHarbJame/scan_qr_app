@@ -21,7 +21,6 @@ class LinkList extends StatelessWidget {
             children: [
               cardfriendlinks( title: itemList![index]?.title ?? "",
                 subtitle: itemList?[index].link ?? "",
-
                 colorcard:kLightDangerColor ,
                 colortext: kOnLightDangerColor,
 
