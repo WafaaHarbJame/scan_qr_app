@@ -14,8 +14,8 @@ import '../auth/user_model.dart';
 
 class edit_link extends StatefulWidget {
   final Link? itemData;
-  edit_link({required this.itemData});
 
+  edit_link({required this.itemData});
 
   @override
   State<StatefulWidget> createState() {
@@ -28,7 +28,7 @@ class edit_link extends StatefulWidget {
 OutlineInputBorder myinputborder() {
   //return type is OutlineInputBorder
   return const OutlineInputBorder(
-    //Outline border type for TextFeild
+      //Outline border type for TextFeild
       borderRadius: BorderRadius.all(Radius.circular(20)),
       borderSide: BorderSide(
         color: Colors.black,
@@ -56,6 +56,7 @@ class _edit_linkState extends State<edit_link> {
   Link? itemData;
 
   _edit_linkState(this.itemData);
+
   @override
   void initState() {
     super.initState();
@@ -64,11 +65,8 @@ class _edit_linkState extends State<edit_link> {
     linkController.text = itemData?.link ?? '';
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(213, 231, 229, 241),
@@ -137,46 +135,46 @@ class _edit_linkState extends State<edit_link> {
             margin: const EdgeInsets.all(50),
             child: Center(
                 child: ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      ApiResponse<EditLink> userApiResponse =
+              onPressed: () async {
+                try {
+                  ApiResponse<EditLink> userApiResponse =
                       await EditLinkProvider().editLink(
-                          itemData!.id??0,
+                          itemData!.id ?? 0,
                           titleController.text,
                           linkController.text,
-                          savedUser!.name??"",
+                          savedUser!.name ?? "",
                           0);
-                      if (userApiResponse.status == Status.LOADING) {
-                      } else if (userApiResponse.status == Status.COMPLETED) {
-                        Fluttertoast.showToast(
-                            msg: userApiResponse.data!.message.toString(),
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.yellow);
-                        print("Log COMPLETED status${userApiResponse.data?.message}");
-                        Navigator.pop(context);
-
-                      } else if (userApiResponse.status == Status.ERROR) {
-                        print("Log Error status${userApiResponse.data?.message}");
-                      }
-                    } catch (e) {
-                      // An error occurred
-                      print('Log An error occurred: $e');
-                    }
-                    // Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: const Color.fromARGB(255, 100, 69, 58),
-                    backgroundColor: const Color.fromARGB(220, 255, 212, 101),
-                    minimumSize: const Size(138, 50),
-                  ),
-                  child: const Text(
-                    'Save',
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                )),
+                  if (userApiResponse.status == Status.LOADING) {
+                  } else if (userApiResponse.status == Status.COMPLETED) {
+                    Fluttertoast.showToast(
+                        msg: userApiResponse.data!.message.toString(),
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.yellow);
+                    print(
+                        "Log COMPLETED status${userApiResponse.data?.message}");
+                    Navigator.pop(context);
+                  } else if (userApiResponse.status == Status.ERROR) {
+                    print("Log Error status${userApiResponse.data?.message}");
+                  }
+                } catch (e) {
+                  // An error occurred
+                  print('Log An error occurred: $e');
+                }
+                // Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: const Color.fromARGB(255, 100, 69, 58),
+                backgroundColor: const Color.fromARGB(220, 255, 212, 101),
+                minimumSize: const Size(138, 50),
+              ),
+              child: const Text(
+                'Save',
+                style: TextStyle(fontSize: 20.0),
+              ),
+            )),
           ),
 
           /*TextField(

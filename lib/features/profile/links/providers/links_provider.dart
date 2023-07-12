@@ -7,12 +7,13 @@ import '../repo/LinkRepository.dart';
 
 class LinkProvider extends ChangeNotifier {
   late LinkRepository _linkRepository;
+  late ApiResponse<AddLinkResponse> _linkObject;
 
   late ApiResponse<List<Link>> _linkList;
   late ApiResponse<List<NearestUsers>> _linkNearList;
-  late ApiResponse<AddLinkResponse> _linkObject;
 
   ApiResponse<List<Link>> get linkList => _linkList;
+  ApiResponse<List<NearestUsers>> get linkNearList => _linkNearList;
   ApiResponse<List<AddLink>> get bodyaddlink => bodyaddlink;
 
   LinkProvider() {

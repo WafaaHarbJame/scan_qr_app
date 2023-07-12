@@ -16,26 +16,24 @@ class _ReceiveViewState extends State<ReceiveView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(top: 47),
-        child: Column(
-          children: [
-            appbaractive(),
-            SizedBox(height: 40),
-            Image.asset(
-              "assets/imgs/shar.png",
-              width: 120,
-              height: 193,
-            ),
-            SizedBox(height: 34),
-         badyactiveshar()
-
-
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 47),
+          child: Column(
+            children: [
+              appbaractive(),
+              SizedBox(height: 10),
+              Image.asset(
+                "assets/imgs/shar.png",
+                width: 100,
+                height: 100,
+              ),
+              SizedBox(height: 10),
+              badyactiveshar(),
+            ],
+          ),
         ),
       ),
-
-
     );
   }
 }
