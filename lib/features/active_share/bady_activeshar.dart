@@ -25,14 +25,14 @@ class _badyactivesharState extends State<badyactiveshar> {
         children: [
           Consumer<LinkProvider>(
             builder: (_, linkProviders, __) {
-              if (linkProviders.linkList.status == Status.LOADING) {
+              if (linkProviders.linkNearList.status == Status.LOADING) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
-              if (linkProviders.linkList.status == Status.ERROR) {
+              if (linkProviders.linkNearList.status == Status.ERROR) {
                 return Center(
-                  child: Text('${linkProviders.linkList.message}'),
+                  child: Text('${linkProviders.linkNearList.message}'),
                 );
               }
               return  ShareLinkList(itemList: linkProviders.linkNearList.data);

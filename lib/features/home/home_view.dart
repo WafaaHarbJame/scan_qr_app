@@ -5,6 +5,7 @@ import 'package:bootcamp_starter/features/home/LinkListHome.dart';
 import 'package:bootcamp_starter/features/new_link/add_link_screen.dart';
 import 'package:bootcamp_starter/features/onbording/onbording_view.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -13,7 +14,9 @@ import '../../network/api_response.dart';
 import '../Scan QR/scanyourorcode.dart';
 import '../active_share/ActiveSharing.dart';
 import '../active_share/Active_sharing_model.dart';
+import '../active_share/DeleteShareResponse.dart';
 import '../auth/ShPreferences.dart';
+import '../auth/location_service.dart';
 import '../auth/user_model.dart';
 import '../profile/links/providers/links_provider.dart';
 
@@ -31,7 +34,16 @@ class _HomeViewState extends State<HomeView> {
   bool isCompleted = false; // Initial value of isCompleted flag
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
+    // LocationService location=new LocationService();
+    // User? savedUser = ShPreferences.getUser();
+    // location.updatePosition(userId: savedUser?.id??0);
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: Colors.transparent,
@@ -53,116 +65,119 @@ class _HomeViewState extends State<HomeView> {
               icon: const Icon(Icons.logout))
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: Text(
-              "Hello, ${savedUser?.name ?? ''}",
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 28,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Text(
+                "Hello, ${savedUser?.name ?? ''}",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 28,
+                ),
               ),
             ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            margin: const EdgeInsets.all(30),
-            decoration: BoxDecoration(
-              border: isCompleted
-                  ? Border.all(
-                      color: Colors.green, // Set the desired border color
-                      width: 2.0, // Set the desired border width
-                    )
-                  : null, // No border if not completed
-            ),
-            child: GestureDetector(
-              onTap: () async {
-                makeShare(context, true);
-              },
-              onDoubleTap: () {
-                makeShare(context, false);
-              },
-              child: QrImageView(
-                data: 'This is a simple QR code',
-                version: QrVersions.auto,
-                size: 280,
-                gapless: false,
+            Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.all(30),
+              decoration: BoxDecoration(
+                border: isCompleted
+                    ? Border.all(
+                        color: Colors.green, // Set the desired border color
+                        width: 2.0, // Set the desired border width
+                      )
+                    : null, // No border if not completed
+              ),
+              child: GestureDetector(
+                onTap: () async {
+                  makeShare(context, true);
+                },
+                onDoubleTap: () {
+                  removeShare(context, false);
+                },
+                child: QrImageView(
+                  data: 'This is a simple QR code',
+                  version: QrVersions.auto,
+                  size: 280,
+                  gapless: false,
+                ),
               ),
             ),
-          ),
-          const Divider(
-            color: Colors.black,
-            thickness: 2,
-            indent: 80,
-            endIndent: 80,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          // CustomList(),
-          Consumer<LinkProvider>(
-            builder: (_, linkProviders, __) {
-              if (linkProviders.linkList.status == Status.LOADING) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (linkProviders.linkList.status == Status.ERROR) {
-                return Center(
-                  child: Text('${linkProviders.linkList.message}'),
-                );
-              }
+            const Divider(
+              color: Colors.black,
+              thickness: 2,
+              indent: 80,
+              endIndent: 80,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            // CustomList(),
+            Consumer<LinkProvider>(
+              builder: (_, linkProviders, __) {
+                if (linkProviders.linkList.status == Status.LOADING) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (linkProviders.linkList.status == Status.ERROR) {
+                  return Center(
+                    child: Text('${linkProviders.linkList.message}'),
+                  );
+                }
 
-              final itemList = linkProviders.linkList.data;
-              return Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        LinkListHome(itemList: itemList?.take(2).toList()),
-                        if (itemList != null && itemList.length > 2) SizedBox(height: 2),
-                         AddItem(),
-                      ],
+                final itemList = linkProviders.linkList.data;
+                return Row(
+
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          LinkListHome(itemList: itemList),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              );
-              return Row(
-                children: [
-                  Expanded(
-                    child: LinkListHome(itemList: itemList?.take(2).toList()),
-                  ),
-                  if (itemList != null && itemList.length >= 2) SizedBox(width: 8),
-                  AddItem(),
-                ],
-              );
 
-              // return Row(
-              //   children: [
-              //     Expanded(
-              //       child: LinkListHome(itemList: itemList?.take(2).toList()),
-              //     ),
-              //     if (itemList != null && itemList.length >= 2) Spacer(),
-              //     if (itemList != null && itemList.length <= 2) Expanded(child: AddItem()),
-              //   ],
-              // );
-              // return Row(
-              //   children: [
-              //     Expanded(
-              //       child: LinkListHome(itemList: itemList?.take(2).toList()),
-              //     ),
-              //     AddItem(),
-              //   ],
-              // );
-              //
-              // //return LinkListHome(itemList: itemsToShow);
-              // return LinkListHome(itemList: linkProviders.linkList.data?.take(2).toList());
-            },
-          )
-        ],
+                    AddItem(),
+                  ],
+                );
+                return Row(
+                  children: [
+                    Expanded(
+                      child: LinkListHome(itemList: itemList?.take(2).toList()),
+                    ),
+                    if (itemList != null && itemList.length >= 2) SizedBox(width: 8),
+                    AddItem(),
+                  ],
+                );
+
+                // return Row(
+                //   children: [
+                //     Expanded(
+                //       child: LinkListHome(itemList: itemList?.take(2).toList()),
+                //     ),
+                //     if (itemList != null && itemList.length >= 2) Spacer(),
+                //     if (itemList != null && itemList.length <= 2) Expanded(child: AddItem()),
+                //   ],
+                // );
+                // return Row(
+                //   children: [
+                //     Expanded(
+                //       child: LinkListHome(itemList: itemList?.take(2).toList()),
+                //     ),
+                //     AddItem(),
+                //   ],
+                // );
+                //
+                // //return LinkListHome(itemList: itemsToShow);
+                // return LinkListHome(itemList: linkProviders.linkList.data?.take(2).toList());
+              },
+            )
+          ],
+        ),
       ),
     );
   }
@@ -174,16 +189,18 @@ class _HomeViewState extends State<HomeView> {
   Future<void> makeShare(BuildContext context, bool isShare) async {
     try {
       ApiResponse<ActiveSharingResponse> apiResponse =
-          await ActiveSharingProvider1().activeShare("sender");
+          await ActiveSharingProvider1().activeShare(savedUser?.id??0);
       if (apiResponse.status == Status.LOADING) {
       } else if (apiResponse.status == Status.COMPLETED) {
         print("Log share COMPLETED ${apiResponse.data?.activeSharing?.id}");
         setState(() {
-          if (isShare) {
-            isCompleted = true;
-          } else {
-            isCompleted = false;
-          }
+          // if (isShare) {
+          //   isCompleted = true;
+          // } else {
+          //   isCompleted = false;
+          // }
+          isCompleted = true;
+
         });
       } else if (apiResponse.status == Status.ERROR) {
         print("Log share Error status ${apiResponse.message}");
@@ -193,6 +210,39 @@ class _HomeViewState extends State<HomeView> {
       print('Log An error occurred: $e');
     }
   }
+  Future<void> removeShare(BuildContext context, bool isShare) async {
+    try {
+      ApiResponse<DeleteShareResponse> apiResponse =
+      await ActiveSharingProvider1().removeShare(savedUser?.id??0);
+      if (apiResponse.status == Status.LOADING) {
+      } else if (apiResponse.status == Status.COMPLETED) {
+        print("Log share COMPLETED ${apiResponse.message}");
+        Fluttertoast.showToast(
+            msg:apiResponse.message??"",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.yellow);
+
+        setState(() {
+          // if (isShare) {
+          //   isCompleted = true;
+          // } else {
+          //   isCompleted = false;
+          // }
+          isCompleted = false;
+
+        });
+      } else if (apiResponse.status == Status.ERROR) {
+        print("Log share Error status ${apiResponse.message}");
+      }
+    } catch (e) {
+      // An error occurred
+      print('Log An error occurred: $e');
+    }
+  }
+
 
   void logoutAndClearData(BuildContext context) {
     // Clear shared preferences data
@@ -208,6 +258,8 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 }
+
+
 
 void showLogoutConfirmationDialog(BuildContext context) {
   showDialog(

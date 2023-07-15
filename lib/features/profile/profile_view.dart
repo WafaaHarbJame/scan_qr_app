@@ -61,7 +61,7 @@ class _ProfileViewState extends State<ProfileView> {
                   child: Text('${linkProvider.linkList.message}'),
                 );
               }
-              return Expanded(child: LinkList(itemList: linkProvider.linkList.data));
+              return SingleChildScrollView(child: Expanded(child: LinkList(itemList: linkProvider.linkList.data)));
 
             },
 

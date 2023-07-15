@@ -5,7 +5,7 @@ import '../features/auth/ShPreferences.dart';
 import 'app_exception.dart';
 
 class ApiBaseHelper {
-  final String _baseUrl = "http://osamapro.online/api";
+  final String _baseUrl = "http://172.16.6.87:8000/api";
 
   Future<dynamic> get(String url, Map<String, String> header) async {
     var responseJson;
@@ -35,6 +35,22 @@ class ApiBaseHelper {
     return responseJson;
   }
 
+
+  Future<dynamic> delete(String url, Map<String, String> header,Map<String, String> body) async {
+    var responseJson;
+    try {
+      final response = await http.delete(
+        Uri.parse(_baseUrl + url),
+        headers: header,
+        body: body,
+      );
+
+      responseJson = _returnResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet connection');
+    }
+    return responseJson;
+  }
   Future<dynamic> put(String url, Map<String, dynamic> body) async {
     var responseJson;
     String? token = ShPreferences.getToken();

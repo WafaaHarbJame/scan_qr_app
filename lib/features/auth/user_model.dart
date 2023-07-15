@@ -30,15 +30,14 @@ class User {
   int? id;
   String? name;
   String? email;
-  String? emailVerifiedAt;
+  Null? emailVerifiedAt;
   String? createdAt;
   String? updatedAt;
   int? isActive;
-  String? country;
-  String? ip;
+  Null? country;
+  Null? ip;
   double? long;
   double? lat;
-  String? fcm;
 
   User(
       {this.id,
@@ -51,8 +50,7 @@ class User {
         this.country,
         this.ip,
         this.long,
-        this.lat,
-        this.fcm});
+        this.lat});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -66,7 +64,6 @@ class User {
     ip = json['ip'];
     long = json['long'];
     lat = json['lat'];
-    fcm = json['fcm'];
   }
 
   Map<String, dynamic> toJson() {
@@ -82,7 +79,6 @@ class User {
     data['ip'] = this.ip;
     data['long'] = this.long;
     data['lat'] = this.lat;
-    data['fcm'] = this.fcm;
     return data;
   }
 }

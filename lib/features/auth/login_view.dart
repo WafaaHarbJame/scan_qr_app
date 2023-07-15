@@ -4,6 +4,7 @@ import 'package:bootcamp_starter/core/util/assets.dart';
 import 'package:bootcamp_starter/core/widgets/custom_labeled_textfield_widget.dart';
 import 'package:bootcamp_starter/core/widgets/primary_outlined_button_widget.dart';
 import 'package:bootcamp_starter/core/widgets/secondary_button_widget.dart';
+import 'package:bootcamp_starter/features/auth/location_service.dart';
 import 'package:bootcamp_starter/features/auth/login_provider.dart';
 import 'package:bootcamp_starter/features/auth/register_view.dart';
 import 'package:bootcamp_starter/features/auth/user_model.dart';
@@ -95,9 +96,13 @@ class _LoginViewState extends State<LoginView> {
                               color: Colors.blue,
                             );
                           } else if (userApiResponse.status == Status.COMPLETED) {
+                            LocationService location=new LocationService();
+                            User? savedUser = ShPreferences.getUser();
+                            location.updatePosition(userId: savedUser?.id??0);
                             Navigator.pushNamed(context, MainAppView.id);
+
                           } else if (userApiResponse.status == Status.ERROR) {
-                            print("Error status");
+                            print("Log Error status ${userApiResponse.status}");
                           }
                         } catch (e) {
                           // An error occurred

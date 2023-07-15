@@ -1,5 +1,6 @@
 import 'package:bootcamp_starter/features/active_share/ActiveSahringRepository.dart';
 import 'package:bootcamp_starter/features/active_share/Active_sharing_model.dart';
+import 'package:bootcamp_starter/features/auth/ShPreferences.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../../network/api_response.dart';
 
@@ -19,13 +20,13 @@ class ActiveSharingProvider extends ChangeNotifier {
 
   ActiveSharingProvider() {
     activeSharingRep = ActiveSharingRep();
-    activeSharing();
+    // activeSharing();
   }
-  activeSharing() async {
+  activeSharing(int id) async {
     apiResponse = ApiResponse.loading('activeShare');
     notifyListeners();
     try {
-      ActiveSharingResponse user = await activeSharingRep.activeShare("/activeShare/2", "sender");
+      ActiveSharingResponse user = await activeSharingRep.activeShare("/activeShare/$id");
       apiResponse = ApiResponse.completed(user.activeSharing);
       notifyListeners();
     } catch (e) {

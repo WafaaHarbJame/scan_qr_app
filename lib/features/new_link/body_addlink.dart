@@ -87,16 +87,21 @@ class _bodyaddlinkState extends State<bodyaddlink> {
                     0);
                 if (userApiResponse.status == Status.LOADING) {
                 } else if (userApiResponse.status == Status.COMPLETED) {
-                  Fluttertoast.showToast(
-                      msg: "Added successfully",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.yellow);
-                  print("Log COMPLETED status${userApiResponse.message}");
-                  linkController.clear();
-                  titleController.clear();
+                  setState(() {
+                    Fluttertoast.showToast(
+                        msg: "Added successfully",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.yellow);
+                    print("Log COMPLETED status${userApiResponse.message}");
+                    linkController.clear();
+                    titleController.clear();
+
+                  });
+
+
 
                 } else if (userApiResponse.status == Status.ERROR) {
                   print("Log Error status${userApiResponse.message}");

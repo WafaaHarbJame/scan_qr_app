@@ -18,8 +18,8 @@ class LinkRepository {
   }
 
 
-  Future<List<NearestUsers>?> fetchNearLinkList() async {
-    final response = await _helper.get("/activeShare/nearest/1", {
+  Future<List<NearestUsers>?> fetchNearLinkList(int id) async {
+    final response = await _helper.get("/activeShare/nearest/$id", {
       'Authorization': 'Bearer $token',
     });
     return NearstSharingResponse.fromJson(response).nearestUsers;

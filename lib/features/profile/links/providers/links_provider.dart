@@ -1,6 +1,8 @@
 import 'package:bootcamp_starter/features/active_share/NearstSharingResponse.dart';
+import 'package:bootcamp_starter/features/auth/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../../network/api_response.dart';
+import '../../../auth/ShPreferences.dart';
 import '../../../new_link/AddLink Response.dart';
 import '../models/link_model.dart';
 import '../repo/LinkRepository.dart';
@@ -15,14 +17,14 @@ class LinkProvider extends ChangeNotifier {
   ApiResponse<List<Link>> get linkList => _linkList;
   ApiResponse<List<NearestUsers>> get linkNearList => _linkNearList;
   ApiResponse<List<AddLink>> get bodyaddlink => bodyaddlink;
-
+  User? savedUser = ShPreferences.getUser();
   LinkProvider() {
     _linkRepository = LinkRepository();
     fetchLinkList();
-    fetchNearLinkList();
+    fetchNearLinkList(savedUser?.id);
   }
 
-  fetchLinkList() async {
+   fetchLinkList() async {
     _linkList = ApiResponse.loading('Fetching Links');
     notifyListeners();
     try {
@@ -36,11 +38,11 @@ class LinkProvider extends ChangeNotifier {
   }
 
 
-  fetchNearLinkList() async {
+  fetchNearLinkList(int? id) async {
     _linkNearList = ApiResponse.loading('Fetching Links');
     notifyListeners();
     try {
-      List<NearestUsers>? links = await _linkRepository.fetchNearLinkList();
+      List<NearestUsers>? links = await _linkRepository.fetchNearLinkList(id!);
       _linkNearList = ApiResponse.completed(links);
       notifyListeners();
     } catch (e) {
@@ -61,6 +63,7 @@ class LinkProvider extends ChangeNotifier {
     try {
       AddLinkResponse links = await _linkRepository.addLink(url, title, link, username, isActive);
       _linkObject = ApiResponse.completed(links);
+      fetchLinkList();
       notifyListeners();
     } catch (e) {
       _linkObject = ApiResponse.error(e.toString());
